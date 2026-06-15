@@ -196,6 +196,8 @@ def render_dashboard():
   .pool-toggle {{ display:flex; align-items:center; gap:8px; padding:6px 0; cursor:pointer; font-size:13px; }}
   .pool-toggle input {{ accent-color:var(--accent); }}
   .pool-toggle .swatch {{ width:10px; height:10px; border-radius:2px; flex-shrink:0; }}
+  .toggle-all-btn {{ width:100%; margin-bottom:10px; padding:7px; background:var(--bg); color:var(--accent); border:1px solid var(--border); border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; }}
+  .toggle-all-btn:hover {{ border-color:var(--accent); }}
   .charts-grid {{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }}
   .chart-panel {{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:16px; }}
   .chart-panel.full {{ grid-column:1 / -1; }}
@@ -247,6 +249,7 @@ def render_dashboard():
   <div class="dashboard-layout">
     <div class="pool-toggles">
       <h3>Pools</h3>
+      <button id="toggle-all" class="toggle-all-btn">Unselect all</button>
       <div id="toggle-list"></div>
     </div>
     <div class="charts-grid">
@@ -376,7 +379,29 @@ function renderToggles() {{
       poolMeta[e.target.dataset.pair].active = e.target.checked;
       updateAllCharts();
       renderSummary();  // top cards update with toggled pools
+      updateToggleAllLabel();
     }});
+  }});
+}}
+
+function updateToggleAllLabel() {{
+  const allActive = Object.values(poolMeta).every(m => m.active);
+  const btn = document.getElementById('toggle-all');
+  if (btn) btn.textContent = allActive ? 'Unselect all' : 'Select all';
+}}
+function setAllPools(active) {{
+  Object.keys(poolMeta).forEach(p => {{ poolMeta[p].active = active; }});
+  renderToggles();
+  updateAllCharts();
+  renderSummary();
+  updateToggleAllLabel();
+}}
+function wireToggleAll() {{
+  const btn = document.getElementById('toggle-all');
+  if (!btn) return;
+  btn.addEventListener('click', () => {{
+    const allActive = Object.values(poolMeta).every(m => m.active);
+    setAllPools(!allActive);
   }});
 }}
 
@@ -486,6 +511,8 @@ buildPoolMeta();   // populate before renderSummary so toggle state is read corr
 renderSummary();
 renderTable();
 renderToggles();
+wireToggleAll();
+updateToggleAllLabel();
 setupTabs();
 </script>
 </body>
