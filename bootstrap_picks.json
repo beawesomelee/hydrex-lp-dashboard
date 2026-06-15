@@ -232,8 +232,8 @@
           "pool_address": "0x1110d6aa4fd324f2836d618609105bb8935bbf4a"
         },
         {
-          "pair": "BASEDAI/USDC",
-          "pool_address": "0x8281833536a41337e2c9450a0277416049514088"
+          "pair": "BASEAI/USDC",
+          "pool_address": "0xB38ebed77331641FfD84312f1f8bF0A4ae8BC2cC"
         }
       ]
     },
@@ -297,8 +297,8 @@
           "pool_address": "0x1110d6aa4fd324f2836d618609105bb8935bbf4a"
         },
         {
-          "pair": "BASEDAI/USDC",
-          "pool_address": "0x8281833536a41337e2c9450a0277416049514088"
+          "pair": "BASEAI/USDC",
+          "pool_address": "0xB38ebed77331641FfD84312f1f8bF0A4ae8BC2cC"
         }
       ]
     }
