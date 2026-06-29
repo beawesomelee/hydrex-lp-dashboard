@@ -521,40 +521,93 @@ setupTabs();
     DASHBOARD_HTML.write_text(html)
 
 
-def select_week_to_measure(weeks: list) -> dict:
-    """Pick the week whose epoch is CLOSING at script time.
+EPOCH_PERIOD = dt.timedelta(days=7)  # one Hydrex epoch = one week (Thu→Thu flip)
 
-    Designed to run Wed 23:59 UTC just before epoch flip. Returns the week
-    containing 'now'. Falls back gracefully if no exact match:
-      - if 'now' is before any week: error (no data yet)
-      - if 'now' is after all weeks: most recent week
-      - allows up to 24h grace after epoch_end so late-running cron still
-        measures the just-closed epoch instead of the upcoming one.
 
-    Critical: do NOT default to weeks[-1] — Austin adds upcoming epochs to
-    the picks file BEFORE the cron runs, so weeks[-1] is the NEXT epoch
-    (with no data yet), not the one we want to measure.
+def _parse_day(d: str) -> dt.datetime:
+    """Parse a 'YYYY-MM-DD' epoch boundary as UTC midnight."""
+    return dt.datetime.fromisoformat(d + "T00:00:00+00:00")
+
+
+def _synthesize_week(anchor: dict, epoch_num: int,
+                     start: dt.datetime, end: dt.datetime) -> dict:
+    """Carry the most recent configured rotation forward to an unconfigured,
+    just-closed epoch.
+
+    Pools are cloned verbatim from the anchor week — "pools stay in rotation
+    until Austin says stop." This is in-memory only; bootstrap_picks.json is
+    never rewritten, so the picks file remains the manual source of truth.
     """
-    now = dt.datetime.now(dt.timezone.utc)
+    return {
+        "hydrex_epoch": epoch_num,
+        "aero_epoch": epoch_num + 107,
+        "epoch_start": start.date().isoformat(),
+        "epoch_end": end.date().isoformat(),
+        "report_date_utc": (end - dt.timedelta(minutes=1)).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "pools": anchor.get("pools", []),
+        "_synthesized_from": anchor["hydrex_epoch"],
+    }
+
+
+def select_week_to_measure(weeks: list, now: dt.datetime = None) -> dict:
+    """Pick the epoch to measure — the one that has most recently CLOSED.
+
+    Resolution order:
+      1. A configured week whose [start, end + 24h grace) contains 'now'.
+         Honors manual picks, including an upcoming epoch Austin pre-added.
+      2. If 'now' precedes every configured week: error (nothing to measure).
+      3. Otherwise 'now' is past all configured weeks. Derive the just-closed
+         epoch from the weekly calendar grid (anchored on the latest configured
+         week). If that epoch is configured, return it; if not, SYNTHESIZE it by
+         carrying the latest rotation forward.
+
+    Step 3 makes the job self-healing: it can never silently stall just because
+    the next epoch was not added to bootstrap_picks.json before the cron ran.
+    Previously this branch returned the stale last week, whose pools were all
+    already recorded, so the run added 0 rows yet reported success.
+
+    'now' is injectable for testing; defaults to the current UTC time.
+    """
+    if now is None:
+        now = dt.datetime.now(dt.timezone.utc)
     GRACE = dt.timedelta(hours=24)
 
+    # 1) Configured week currently inside its measurement window (incl. grace).
     for w in weeks:
-        start = dt.datetime.fromisoformat(w["epoch_start"] + "T00:00:00+00:00")
-        end   = dt.datetime.fromisoformat(w["epoch_end"]   + "T00:00:00+00:00")
-        # Window: from start, through end + 24h grace
+        start = _parse_day(w["epoch_start"])
+        end = _parse_day(w["epoch_end"])
         if start <= now < end + GRACE:
             return w
 
-    # If we're past every configured week, measure the most recent one
     weeks_sorted = sorted(weeks, key=lambda w: w["epoch_start"])
-    if now >= dt.datetime.fromisoformat(weeks_sorted[-1]["epoch_end"] + "T00:00:00+00:00"):
-        return weeks_sorted[-1]
+    earliest = weeks_sorted[0]
+    if now < _parse_day(earliest["epoch_start"]):
+        # 2) 'now' is before any configured week — nothing to measure yet.
+        raise RuntimeError(
+            f"No bootstrap week covers current time {now.isoformat()}. "
+            f"Earliest configured: {earliest['epoch_start']}"
+        )
 
-    # 'now' is before any configured week — nothing to measure
-    raise RuntimeError(
-        f"No bootstrap week covers current time {now.isoformat()}. "
-        f"Earliest configured: {weeks_sorted[0]['epoch_start']}"
-    )
+    # 3) Past all configured weeks — locate the just-closed epoch on the grid.
+    anchor = weeks_sorted[-1]
+    s_anchor = _parse_day(anchor["epoch_start"])
+    k_now = (now - s_anchor) // EPOCH_PERIOD   # index of the epoch containing 'now'
+    k_closed = k_now - 1                       # the epoch that just closed
+    epoch_num = anchor["hydrex_epoch"] + k_closed
+    start = s_anchor + EPOCH_PERIOD * k_closed
+    end = start + EPOCH_PERIOD
+
+    # Already in the picks file (e.g. the anchor itself, when nothing newer has
+    # closed)? Return it so manual config wins and idempotency is preserved.
+    for w in weeks:
+        if w["hydrex_epoch"] == epoch_num:
+            return w
+
+    synth = _synthesize_week(anchor, epoch_num, start, end)
+    print(f"  WARNING: epoch {epoch_num} ({synth['epoch_start']} -> {synth['epoch_end']}) "
+          f"not in bootstrap_picks.json — carrying forward epoch "
+          f"{anchor['hydrex_epoch']}'s {len(synth['pools'])}-pool rotation.")
+    return synth
 
 
 def row_already_recorded(hydrex_epoch: int, pool_address: str) -> bool:
