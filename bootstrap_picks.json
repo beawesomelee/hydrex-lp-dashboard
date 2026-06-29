@@ -469,6 +469,10 @@
         {
           "pair": "cbADA/cbBTC",
           "pool_address": "0xe8C3C7f1f845bc17E6964D42D84B21F97b12FCC0"
+        },
+        {
+          "pair": "DEGEN/USDC",
+          "pool_address": "0xd2dd277feeec88405db3741239b0a9a96d01692d"
         }
       ]
     }
