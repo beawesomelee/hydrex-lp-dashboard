@@ -376,6 +376,99 @@
         {
           "pair": "BIO/WETH",
           "pool_address": "0x4BFf50D91BC2fDE06f31A91a781bd461f69e9BD8"
+        },
+        {
+          "pair": "VVV/cbBTC",
+          "pool_address": "0xB651439c9B086c7B4399C623e54dEeBCb3905f17"
+        },
+        {
+          "pair": "cbADA/cbBTC",
+          "pool_address": "0xe8C3C7f1f845bc17E6964D42D84B21F97b12FCC0"
+        }
+      ]
+    },
+    {
+      "hydrex_epoch": 40,
+      "aero_epoch": 147,
+      "epoch_start": "2026-06-18",
+      "epoch_end": "2026-06-25",
+      "report_date_utc": "2026-06-24T23:59:00Z",
+      "pools": [
+        {
+          "pair": "USDC/VVV",
+          "pool_address": "0x02107bab40bba06ae979a15f67b5ad3853c5e116"
+        },
+        {
+          "pair": "USDC/ZEN",
+          "pool_address": "0x415233bf9b9156d4f777d580e67c0a4e398a84c3"
+        },
+        {
+          "pair": "WETH/CHECK",
+          "pool_address": "0x567b69f72c0a2689c9be0cfba576af3caa896cb2"
+        },
+        {
+          "pair": "WETH/NOCK",
+          "pool_address": "0x467a8846e7b54eac5d4d1cb2fdc9b8752212ff0e"
+        },
+        {
+          "pair": "LFI/USDC",
+          "pool_address": "0x53ab4c60ff04b782f630a8685af95404f099aafd"
+        },
+        {
+          "pair": "AORA/USDC",
+          "pool_address": "0x7b5b9ac36bef2e808a02568704f651c607634c4b"
+        },
+        {
+          "pair": "DRB/WETH",
+          "pool_address": "0xa9a12101beddf0950c65c32a915ae21db002623d"
+        },
+        {
+          "pair": "DIEM/USDC",
+          "pool_address": "0xe6D1dABdDDb884c20C0eFF3c50FBa364e6C14399"
+        },
+        {
+          "pair": "HOME/USDC",
+          "pool_address": "0x3343646E7d40099F1456405859F6c28A40423BbD"
+        },
+        {
+          "pair": "AUKI/USDC",
+          "pool_address": "0x3c709ea8105174964a45ca913dc948f2b7477b66"
+        },
+        {
+          "pair": "FUN/WETH",
+          "pool_address": "0xbcbc4c1428632a176d4cbe0b7b891bf4ee6b3e09"
+        },
+        {
+          "pair": "OVPP/USDC",
+          "pool_address": "0x8857358a26254f8a1100434225495e633d496950"
+        },
+        {
+          "pair": "UP/WETH",
+          "pool_address": "0x1110d6aa4fd324f2836d618609105bb8935bbf4a"
+        },
+        {
+          "pair": "BASEAI/USDC",
+          "pool_address": "0xB38ebed77331641FfD84312f1f8bF0A4ae8BC2cC"
+        },
+        {
+          "pair": "VELVET/WETH",
+          "pool_address": "0x77D190B97B20161345AC718c93f530E8a7A4800b"
+        },
+        {
+          "pair": "MOCA/WETH",
+          "pool_address": "0x3e172Af5f0dcA7b8D183D2Ec7Bc14D8Cab2216A8"
+        },
+        {
+          "pair": "BIO/WETH",
+          "pool_address": "0x4BFf50D91BC2fDE06f31A91a781bd461f69e9BD8"
+        },
+        {
+          "pair": "VVV/cbBTC",
+          "pool_address": "0xB651439c9B086c7B4399C623e54dEeBCb3905f17"
+        },
+        {
+          "pair": "cbADA/cbBTC",
+          "pool_address": "0xe8C3C7f1f845bc17E6964D42D84B21F97b12FCC0"
         }
       ]
     }
