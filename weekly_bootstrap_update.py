@@ -16,6 +16,7 @@ Data sources:
 import csv
 import datetime as dt
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -657,7 +658,27 @@ def purge_stub_rows_for_epoch(hydrex_epoch: int) -> int:
     return removed
 
 
+def sync_with_remote():
+    """Pull before measuring so idempotency is judged against PUBLISHED state.
+
+    row_already_recorded() reads the local tracker CSV. The daily pool job and
+    this weekly job both push to the same repo, so a stale local clone makes the
+    guard blind: it sees no row for an epoch that IS already published, re-records
+    it at a different HYDX price, and the merge lands duplicate (epoch, pool) rows
+    that double-count on the dashboard. Pulling first closes that window.
+    """
+    try:
+        subprocess.run(["git", "-C", str(SCRIPT_DIR), "pull", "--ff-only"],
+                       check=True, capture_output=True, text=True, timeout=120)
+        print("Synced with origin before measuring.")
+    except Exception as e:
+        out = getattr(e, "stderr", "") or str(e)
+        print(f"  WARNING: git pull failed ({out.strip()[:200]}) — "
+              f"local tracker may be behind origin; duplicate rows are possible.")
+
+
 def main():
+    sync_with_remote()
     picks = json.loads(PICKS_FILE.read_text())
     weeks = picks.get("weeks", [])
     if not weeks:
