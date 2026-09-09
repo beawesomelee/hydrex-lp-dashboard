@@ -9,210 +9,96 @@
     :root { --bg:#0f1115; --panel:#171a21; --border:#262a33; --text:#e7ecf2; --muted:#9aa4b2; --accent:#4ea8ff; --red:#ff5c5c; --green:#3ddc97; --amber:#f5b83d; }
     * { box-sizing: border-box; }
     body { margin:0; padding:24px; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; font-variant-numeric:tabular-nums; }
-    h1 { margin:0 0 6px; font-size:22px; }
-    .subtitle { color:var(--muted); margin-bottom:14px; font-size:13px; max-width:72ch; }
-    .nav { margin-bottom:18px; display:flex; flex-wrap:wrap; gap:8px; }
-    .nav a { color:var(--accent); text-decoration:none; padding:6px 12px; border:1px solid var(--border); border-radius:6px; font-size:13px; }
-    .nav a.here { background:var(--accent); color:var(--bg); border-color:var(--accent); }
-    .layout { display:grid; grid-template-columns:300px 1fr; gap:20px; align-items:start; }
-    .sidebar { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:16px; position:sticky; top:20px; }
-    .sidebar h3 { margin:0 0 10px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); }
-    label.f { display:block; font-size:12px; color:var(--muted); margin:10px 0 4px; }
-    input[type=text], input[type=number], select, button { background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:7px 10px; font-size:13px; width:100%; font-family:inherit; }
-    input:focus-visible, select:focus-visible, button:focus-visible { outline:2px solid var(--accent); outline-offset:1px; }
-    button { cursor:pointer; } button:hover { border-color:var(--accent); }
-    button.primary { background:var(--accent); color:var(--bg); border-color:var(--accent); font-weight:600; }
-    .seg { display:flex; gap:4px; } .seg button { flex:1; }
-    .seg button.active { background:var(--accent); color:var(--bg); border-color:var(--accent); font-weight:600; }
-    .row2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-    .divider { height:1px; background:var(--border); margin:14px 0; }
-    .check { display:flex; align-items:center; gap:8px; font-size:13px; margin-top:8px; cursor:pointer; user-select:none; }
-    .check input { width:16px; height:16px; accent-color:var(--accent); cursor:pointer; }
-    .panel { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:16px; }
-    .panel h4 { margin:0 0 10px; font-size:14px; }
-    .hdr { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; }
-    .hdr .big { font-size:20px; font-weight:600; }
-    .tiles { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
-    .tile { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:12px; min-width:0; }
-    .tile .k { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.8px; }
-    .tile .v { font-size:22px; font-weight:600; margin-top:4px; overflow-wrap:anywhere; }
-    .tile .s { font-size:12px; color:var(--muted); margin-top:2px; }
-    .ok { color:var(--green); } .warn { color:var(--amber); } .bad { color:var(--red); }
-    .diag { margin-top:12px; padding:10px 12px; border-radius:6px; font-size:13px; background:rgba(245,184,61,.10); border:1px solid rgba(245,184,61,.25); }
-    .diag.bad { background:rgba(255,92,92,.10); border-color:rgba(255,92,92,.3); }
-    .diag.ok { background:rgba(61,220,151,.10); border-color:rgba(61,220,151,.3); }
-    table { font-size:12px; border-collapse:collapse; width:100%; }
-    th { text-align:left; color:var(--muted); padding:6px; font-weight:600; border-bottom:1px solid var(--border); white-space:nowrap; }
-    td { padding:6px; border-bottom:1px solid var(--border); white-space:nowrap; }
-    tr:last-child td { border-bottom:0; }
-    .num { text-align:right; }
-    .tag { display:inline-block; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600; margin-right:4px; }
-    .tag.in { background:rgba(61,220,151,.15); color:var(--green); }
-    .tag.out { background:rgba(154,164,178,.15); color:var(--muted); }
-    .tag.hyp { background:rgba(78,168,255,.15); color:var(--accent); }
-    .tag.mine { background:rgba(245,184,61,.15); color:var(--amber); }
-    .live { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); }
+    .wrap { max-width: 960px; margin: 0 auto; }
+    h1 { margin:0 0 16px; font-size:22px; }
+    .top { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+    .top label { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+    select { background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:8px 10px; font-size:14px; font-family:inherit; min-width:260px; }
+    select:focus-visible { outline:2px solid var(--accent); outline-offset:1px; }
+    .live { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); margin-left:auto; }
     .dot { width:8px; height:8px; border-radius:50%; background:var(--green); }
     .dot.err { background:var(--red); } .dot.wait { background:var(--amber); }
-    .meta { font-size:12px; color:var(--muted); }
+    .panel { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:16px; }
+    .panel h4 { margin:0 0 4px; font-size:14px; }
+    .big { font-size:20px; font-weight:600; }
+    .meta { font-size:12px; color:var(--muted); margin-top:2px; }
+    .note { font-size:12px; color:var(--muted); margin-bottom:10px; }
+    table { font-size:13px; border-collapse:collapse; width:100%; }
+    th { text-align:left; color:var(--muted); padding:7px 8px; font-weight:600; border-bottom:1px solid var(--border); white-space:nowrap; font-size:12px; }
+    td { padding:7px 8px; border-bottom:1px solid var(--border); white-space:nowrap; }
+    tr:last-child td { border-bottom:0; }
+    .num { text-align:right; }
+    td.key { font-weight:600; }
+    .ok { color:var(--green); } .warn { color:var(--amber); } .bad { color:var(--red); }
     .scroll { overflow-x:auto; }
-    .cliff { display:inline-block; padding:4px 8px; background:rgba(255,92,92,.12); color:var(--red); border-radius:4px; font-size:12px; font-weight:600; }
-    .chart-wrap { position:relative; height:280px; }
-    .rm { width:auto; padding:2px 8px; font-size:11px; }
-    .small { font-size:11px; color:var(--muted); }
-    @media (max-width: 900px) { .layout { grid-template-columns:1fr; } .sidebar { position:static; } .tiles { grid-template-columns:1fr 1fr; } }
+    .chart-wrap { position:relative; height:300px; }
     @media (prefers-reduced-motion: reduce) { * { transition:none !important; animation:none !important; } }
   </style>
 </head>
 <body>
+<div class="wrap">
   <h1>Hydrex Depth Calculator</h1>
-  <div class="subtitle">Live concentrated-liquidity depth for any Hydrex pool. Enter a trade size to see where price lands and what you pay in slippage, or set a slippage limit to see how much you can trade inside it. Positions refresh from liquidity.api.hydrex.fi.</div>
-  <div class="nav">
-    <a href="index.html">Aero vs Hydrex</a>
-    <a href="hydrex_pools.html">Hydrex Daily</a>
-    <a href="bootstrap.html">Bootstrap Tracker</a>
-    <a href="ichi.html">ICHI Diagnostic</a>
-    <a href="slippage.html" class="here">Depth Calculator</a>
+
+  <div class="top">
+    <label for="poolSel">Pool</label>
+    <select id="poolSel"><option value="0xce4838e3287d66ce20fa296704f2b77de9d2a92d">wtFGI/USDC</option></select>
+    <div class="live"><span class="dot wait" id="dot"></span><span id="liveTxt">connecting…</span></div>
   </div>
 
-  <div class="layout">
-    <div class="sidebar">
-      <h3>Pool</h3>
-      <label class="f" for="addr">Pool address or wallet</label>
-      <input type="text" id="addr" spellcheck="false" placeholder="0x…" />
-      <div id="poolPickWrap" hidden>
-        <label class="f" for="poolPick">Wallet has positions in</label>
-        <select id="poolPick"></select>
-      </div>
-      <div class="row2" style="margin-top:8px">
-        <button class="primary" id="loadBtn">Load</button>
-        <button id="refreshBtn">Refresh</button>
-      </div>
-      <label class="check"><input type="checkbox" id="auto" checked /> Auto-refresh every <span id="autoSecLbl">60</span>s</label>
-      <button id="shareBtn" style="margin-top:8px">Copy share link</button>
-
-      <div class="divider"></div>
-      <h3>Trade</h3>
-      <div class="seg" role="group" aria-label="Direction">
-        <button id="dirBuy" class="active">Buy <span id="sym0a">token</span></button>
-        <button id="dirSell">Sell <span id="sym0b">token</span></button>
-      </div>
-      <label class="f" for="amt">Trade size (USD)</label>
-      <input type="number" id="amt" value="5000" min="0" step="100" />
-
-      <label class="f" for="tol">Slippage limit (%)</label>
-      <div class="row2">
-        <input type="number" id="tol" value="2" min="0" step="0.1" />
-        <select id="metric" aria-label="Limit applies to">
-          <option value="slip">avg fill vs spot</option>
-          <option value="impact">end price vs spot</option>
-        </select>
-      </div>
-
-      <div class="divider"></div>
-      <h3>What-if</h3>
-      <label class="f" for="mult">Scale all live liquidity ×</label>
-      <input type="number" id="mult" value="1" min="0" step="0.5" />
-      <label class="f" for="fee">Pool fee (%)</label>
-      <input type="number" id="fee" value="0.05" min="0" step="0.01" />
-      <label class="f">Add a hypothetical band</label>
-      <div class="row2">
-        <input type="number" id="hLow" placeholder="low $" step="0.01" />
-        <input type="number" id="hHigh" placeholder="high $" step="0.01" />
-      </div>
-      <div class="row2" style="margin-top:6px">
-        <input type="number" id="hVal" placeholder="fund $" step="100" />
-        <button id="hAdd">Add band</button>
-      </div>
-      <div class="small" style="margin-top:6px">A band above spot holds only the token (absorbs buys). Below spot it holds only the quote (absorbs sells). Funded at today's spot.</div>
-    </div>
-
-    <div>
-      <div class="panel">
-        <div class="hdr">
-          <div>
-            <div class="big" id="poolName">Loading…</div>
-            <div class="meta" id="poolMeta"></div>
-          </div>
-          <div class="live"><span class="dot wait" id="dot"></span><span id="liveTxt">connecting…</span></div>
-        </div>
-        <div id="diag" class="diag" hidden></div>
-      </div>
-
-      <div class="panel">
-        <h4 id="fwdTitle">At this trade size</h4>
-        <div class="tiles">
-          <div class="tile"><div class="k">End price</div><div class="v" id="tEnd">–</div><div class="s" id="tEndS"></div></div>
-          <div class="tile"><div class="k">Price impact</div><div class="v" id="tImp">–</div><div class="s">end price vs spot</div></div>
-          <div class="tile"><div class="k">Avg fill</div><div class="v" id="tAvg">–</div><div class="s" id="tAvgS"></div></div>
-          <div class="tile"><div class="k">Slippage</div><div class="v" id="tSlip">–</div><div class="s">avg fill vs spot</div></div>
-        </div>
-        <div style="margin-top:10px" id="fwdNote" class="meta"></div>
-      </div>
-
-      <div class="panel">
-        <h4 id="invTitle">Inside your slippage limit</h4>
-        <div class="tiles" style="grid-template-columns:repeat(3,1fr)">
-          <div class="tile"><div class="k">Max trade</div><div class="v ok" id="tMax">–</div><div class="s" id="tMaxS"></div></div>
-          <div class="tile"><div class="k">You'd receive</div><div class="v" id="tMaxGet">–</div><div class="s" id="tMaxGetS"></div></div>
-          <div class="tile"><div class="k">Price ends at</div><div class="v" id="tMaxEnd">–</div><div class="s" id="tMaxEndS"></div></div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h4 id="ladTitle">Depth ladder</h4>
-        <div class="meta" style="margin-bottom:8px" id="ladNote"></div>
-        <div class="scroll"><table id="ladder"><thead><tr><th>Price reaches</th><th class="num">Move</th><th class="num">Cumulative trade</th><th class="num">Liquidity after</th></tr></thead><tbody></tbody></table></div>
-      </div>
-
-      <div class="panel">
-        <h4 id="chartTitle">Slippage curve</h4>
-        <div class="chart-wrap"><canvas id="curve" role="img" aria-label="Slippage and price impact versus trade size"></canvas></div>
-      </div>
-
-      <div class="panel">
-        <h4>Live positions <span class="small" id="posCount"></span></h4>
-        <div class="scroll"><table id="pos"><thead><tr><th>On</th><th>Position</th><th>Range</th><th class="num" id="th0">token</th><th class="num" id="th1">quote</th><th class="num">Value</th><th>Status</th></tr></thead><tbody></tbody></table></div>
-        <div class="meta" style="margin-top:8px">Untick a position to see depth without it. Hypothetical bands are local only and never touch the chain.</div>
-      </div>
-    </div>
+  <div class="panel">
+    <div class="big" id="poolName">Loading…</div>
+    <div class="meta" id="poolMeta"></div>
   </div>
+
+  <div class="panel">
+    <h4 id="buyTitle">Buys</h4>
+    <div class="note">What a market buy of each size does right now. Slippage = average fill vs spot, fee included. Price impact = where price ends vs spot.</div>
+    <div class="scroll"><table id="buyTbl"><thead><tr><th>Buy size</th><th class="num">Avg fill</th><th class="num">Slippage</th><th class="num">End price</th><th class="num">Price impact</th><th class="num" id="buyGotH">Received</th></tr></thead><tbody></tbody></table></div>
+  </div>
+
+  <div class="panel">
+    <h4>Max trade before price moves</h4>
+    <div class="note">The largest single buy or sell that keeps price impact at or under each threshold.</div>
+    <div class="scroll"><table id="invTbl"><thead><tr><th>Price impact ≤</th><th class="num">Max buy</th><th class="num" id="invBuyGotH">Received</th><th class="num">Max sell</th><th class="num" id="invSellGotH">Received</th></tr></thead><tbody></tbody></table></div>
+  </div>
+
+  <div class="panel">
+    <h4 id="chartTitle">Slippage curve</h4>
+    <div class="chart-wrap"><canvas id="curve" role="img" aria-label="Slippage and price impact versus buy size"></canvas></div>
+  </div>
+</div>
 
 <script>
 const API = 'https://liquidity.api.hydrex.fi';
+const PAIRS_API = 'https://api.hydrex.fi/stats/top-pairs?days=7';
 const DEFAULT_POOL = '0xce4838e3287d66ce20fa296704f2b77de9d2a92d';
-const AUTO_SEC = 60;
-const S = { poolId:null, wallet:null, pool:null, positions:[], hyp:[], disabled:new Set(), dir:'buy', mult:1, fee:0.0005, timer:null, chart:null, hypSeq:0 };
+const SIZES = [1, 100, 1000, 2500, 5000, 10000];
+const TOLS  = [0.05, 0.1, 0.25, 0.5, 1, 2, 5];
+const S = { pool:null, positions:[], fee:0.0005, chart:null };
+let PAIRS = {};
 const $ = id => document.getElementById(id);
 
 const fmtUsd = (x, d=2) => (isFinite(x) ? '$' + Number(x).toLocaleString(undefined,{minimumFractionDigits:d, maximumFractionDigits:d}) : '∞');
-const fmtP   = (x)      => (isFinite(x) ? '$' + Number(x).toLocaleString(undefined,{minimumFractionDigits: x<1?4:2, maximumFractionDigits: x<1?4:2}) : '∞');
-const fmtPct = (x, d=1) => (isFinite(x) ? (x>=0?'+':'') + x.toFixed(d) + '%' : '∞');
+const fmtP   = x => (isFinite(x) ? '$' + Number(x).toLocaleString(undefined,{minimumFractionDigits: x<1?4:2, maximumFractionDigits: x<1?4:2}) : '∞');
+const fmtPct = (x, d=2) => (isFinite(x) ? (x>=0?'+':'') + x.toFixed(d) + '%' : '∞');
 const fmtNum = (x, d=2) => Number(x).toLocaleString(undefined,{maximumFractionDigits:d});
-const short  = a => a ? a.slice(0,6) + '…' + a.slice(-4) : '';
 
-// ---- CL math (Uniswap v3 / Algebra) ----
+// ---- concentrated-liquidity math (Uniswap v3 / Algebra) ----
 const sqrtAtTick  = t => Math.pow(1.0001, t/2);
 const priceOf     = sq => sq*sq*Math.pow(10, S.pool.dec0 - S.pool.dec1);
 const sqrtOfPrice = p  => Math.sqrt(p * Math.pow(10, S.pool.dec1 - S.pool.dec0));
 
-function bands() {
-  const out = [];
-  for (const p of S.positions) if (!S.disabled.has(p.id) && p.L > 0) out.push({ L:p.L*S.mult, tl:p.tl, tu:p.tu });
-  for (const h of S.hyp) out.push({ L:h.L, tl:h.tl, tu:h.tu });
-  return out;
-}
-function tickMap(bs) {
+function tickMap() {
   const m = new Map();
-  for (const b of bs) { m.set(b.tl, (m.get(b.tl)||0) + b.L); m.set(b.tu, (m.get(b.tu)||0) - b.L); }
+  for (const b of S.positions) { if (b.L <= 0) continue; m.set(b.tl, (m.get(b.tl)||0) + b.L); m.set(b.tu, (m.get(b.tu)||0) - b.L); }
   return [...m.entries()].sort((a,b) => a[0]-b[0]);
 }
-function activeL(bs, tick) { let L = 0; for (const b of bs) if (b.tl <= tick && tick < b.tu) L += b.L; return L; }
+function activeL(tick) { let L = 0; for (const b of S.positions) if (b.tl <= tick && tick < b.tu) L += b.L; return L; }
 
-// Simulate a trade of `usd` (USD notional at spot) against the band set. Returns end price, amount out, avg fill, slippage, impact.
-function simulate(dir, usd, bs) {
+// Trade of `usd` notional (at spot). 'buy' = quote in, token out (price up); 'sell' = token in, quote out (price down).
+function simulate(dir, usd) {
   const p = S.pool, spot = p.price, sq0 = sqrtOfPrice(spot);
-  const tm = tickMap(bs); let L = activeL(bs, p.tick), sq = sq0, out = 0, ranOut = false;
+  const tm = tickMap(); let L = activeL(p.tick), sq = sq0, out = 0, ranOut = false;
   if (dir === 'buy') {
     let rem = usd * Math.pow(10, p.dec1) * (1 - S.fee);
     for (const [t, net] of tm.filter(([t]) => sqrtAtTick(t) > sq)) {
@@ -237,191 +123,85 @@ function simulate(dir, usd, bs) {
     return { endPrice:endP, got:gotQ, avg, impact:(1 - endP/spot)*100, slip:(1 - avg/spot)*100, ranOut };
   }
 }
-function metricOf(r, metric) { return r.ranOut ? Infinity : (metric === 'slip' ? r.slip : r.impact); }
-function inverse(dir, tol, metric, bs) {
+const impactOf = r => r.ranOut ? Infinity : r.impact;
+// largest usd with price impact <= tol
+function inverse(dir, tol) {
   let lo = 0, hi = 100;
-  const m = x => metricOf(simulate(dir, x, bs), metric);
+  const m = x => impactOf(simulate(dir, x));
   let g = 0; while (m(hi) <= tol && g++ < 40) { lo = hi; hi *= 2; if (hi > 1e12) break; }
   for (let i = 0; i < 60; i++) { const mid = (lo+hi)/2; if (m(mid) <= tol) lo = mid; else hi = mid; }
   return lo;
-}
-function ladder(dir, bs) {
-  const p = S.pool; let sq = sqrtOfPrice(p.price), L = activeL(bs, p.tick), cum = 0; const rows = [];
-  const tm = tickMap(bs);
-  const seq = dir === 'buy' ? tm.filter(([t]) => sqrtAtTick(t) > sq) : tm.filter(([t]) => sqrtAtTick(t) < sq).reverse();
-  for (const [t, net] of seq) {
-    if (L <= 0 || rows.length >= 8) break;
-    const sn = sqrtAtTick(t);
-    if (dir === 'buy') { cum += L*(sn - sq) / Math.pow(10, p.dec1) / (1 - S.fee); L += net; }
-    else { cum += L*(1/sn - 1/sq) / Math.pow(10, p.dec0) / (1 - S.fee) * p.price; L -= net; }
-    rows.push({ price:priceOf(sn), cum, Lafter:L }); sq = sn;
-  }
-  return rows;
-}
-function bandL(valueUsd, lowP, highP) {
-  const p = S.pool, sq = sqrtOfPrice(p.price), sl = sqrtOfPrice(lowP), su = sqrtOfPrice(highP);
-  let a0 = 0, a1 = 0;
-  if (sq <= sl) a0 = (su - sl)/(sl*su); else if (sq >= su) a1 = (su - sl); else { a0 = (su - sq)/(sq*su); a1 = (sq - sl); }
-  const unit = a0/Math.pow(10, p.dec0)*p.price + a1/Math.pow(10, p.dec1);
-  return unit > 0 ? valueUsd/unit : 0;
-}
-function bandAmounts(L, tl, tu) {
-  const p = S.pool, sq = sqrtOfPrice(p.price), sl = sqrtAtTick(tl), su = sqrtAtTick(tu);
-  let a0 = 0, a1 = 0;
-  if (sq <= sl) a0 = L*(su - sl)/(sl*su); else if (sq >= su) a1 = L*(su - sl); else { a0 = L*(su - sq)/(sq*su); a1 = L*(sq - sl); }
-  return { a0:a0/Math.pow(10, p.dec0), a1:a1/Math.pow(10, p.dec1) };
 }
 
 // ---- data ----
 async function getJson(url) { const r = await fetch(url, { cache:'no-store' }); if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }
 function parsePool(d) {
   const pl = d.pool;
-  S.pool = { id:pl.id, sym0:pl.token0.symbol, sym1:pl.token1.symbol, dec0:+pl.token0.decimals, dec1:+pl.token1.decimals,
-             tick:+pl.tick, price:+pl.currentPrice, tvl:+pl.totalValueLockedUSD, tvlIn:+pl.totalValueInRangeUSD, liq:pl.liquidity };
-  S.positions = (d.positions||[]).filter(x => x.range && x.range.tickLower !== undefined).map(x => ({
-    id:String(x.id), owner:String(x.owner||'').toLowerCase(), L:Number(x.liquidity), tl:+x.range.tickLower, tu:+x.range.tickUpper,
-    inRange:!!(x.status && x.status.inRange), a0:+((x.amounts||{}).token0||0), a1:+((x.amounts||{}).token1||0),
-    usd:+((x.valuesUSD||{}).total||0), ichi:!!x.isIchiVaultPosition }));
+  S.pool = { sym0:pl.token0.symbol, sym1:pl.token1.symbol, dec0:+pl.token0.decimals, dec1:+pl.token1.decimals, tick:+pl.tick, price:+pl.currentPrice, tvl:+pl.totalValueLockedUSD, tvlIn:+pl.totalValueInRangeUSD };
+  S.positions = (d.positions||[]).filter(x => x.range && x.range.tickLower !== undefined).map(x => ({ L:Number(x.liquidity), tl:+x.range.tickLower, tu:+x.range.tickUpper }));
 }
 function setLive(ok, txt) { $('dot').className = 'dot' + (ok ? '' : ' err'); $('liveTxt').textContent = txt; }
-async function loadPool(id) {
-  S.poolId = id; $('dot').className = 'dot wait'; $('liveTxt').textContent = 'loading…';
+async function loadPairs() {
+  try {
+    const d = await getJson(PAIRS_API);
+    const rows = (d.pairs||[]).map(p => ({ id:String(p.id).toLowerCase(), name:`${p.token0.symbol}/${p.token1.symbol}`, tvl:+p.totalValueLockedUSD||0, fee:+p.fee })).sort((a,b) => b.tvl - a.tvl);
+    PAIRS = {}; for (const r of rows) PAIRS[r.id] = r;
+    const pinned = rows.filter(r => r.id === DEFAULT_POOL), rest = rows.filter(r => r.id !== DEFAULT_POOL);
+    const html = [...pinned, ...rest].map(r => `<option value="${r.id}">${r.name} · ${fmtUsd(r.tvl,0)}</option>`).join('');
+    if (html) $('poolSel').innerHTML = html;
+  } catch (e) { /* keep the pinned default option */ }
+}
+async function load() {
+  const id = $('poolSel').value, pr = PAIRS[id.toLowerCase()];
+  S.fee = pr && pr.fee >= 0 ? pr.fee/100 : 0.0005;   // top-pairs fee is a percent
+  $('dot').className = 'dot wait'; $('liveTxt').textContent = 'loading…';
   try { parsePool(await getJson(`${API}/positions/pool/${id}`)); setLive(true, 'live · ' + new Date().toLocaleTimeString()); render(); }
   catch (e) { setLive(false, 'fetch failed: ' + e.message); }
 }
-async function loadWallet(w) {
-  S.wallet = w.toLowerCase();
-  const d = await getJson(`${API}/positions/user/${w}`);
-  const pools = (d.positionsByPool||[]).map(pp => ({ id:pp.poolId, name:`${pp.tokens.token0.symbol}/${pp.tokens.token1.symbol}`, usd:(pp.poolSummary||{}).totalPositionUSD||0 })).sort((a,b) => b.usd - a.usd);
-  const sel = $('poolPick'); sel.innerHTML = pools.map(p => `<option value="${p.id}">${p.name} · ${fmtUsd(p.usd,0)}</option>`).join('');
-  $('poolPickWrap').hidden = pools.length === 0;
-  if (!pools.length) { setLive(false, 'no positions for this wallet'); return; }
-  await loadPool(sel.value);
-}
-async function load() {
-  const v = $('addr').value.trim(); if (!/^0x[0-9a-fA-F]{40}$/.test(v)) { setLive(false, 'enter a 0x address'); return; }
-  S.disabled.clear(); S.hyp = [];
-  try { const d = await getJson(`${API}/positions/pool/${v}`); if (d && d.pool) { S.wallet = null; $('poolPickWrap').hidden = true; parsePool(d); S.poolId = v; setLive(true, 'live · ' + new Date().toLocaleTimeString()); render(); return; } } catch (e) {}
-  try { await loadWallet(v); } catch (e) { setLive(false, 'fetch failed: ' + e.message); }
-}
-function setAuto() {
-  if (S.timer) clearInterval(S.timer); S.timer = null;
-  if ($('auto').checked) S.timer = setInterval(() => { if (S.poolId) loadPool(S.poolId); }, AUTO_SEC*1000);
-}
 
 // ---- render ----
-function cls(x, warn, bad) { return x >= bad ? 'bad' : x >= warn ? 'warn' : 'ok'; }
+const cls = (x, warn, bad) => x >= bad ? 'bad' : x >= warn ? 'warn' : 'ok';
 function render() {
-  if (!S.pool) return;
-  const p = S.pool, bs = bands(), dir = S.dir, sym0 = p.sym0, sym1 = p.sym1;
-  $('sym0a').textContent = sym0; $('sym0b').textContent = sym0; $('th0').textContent = sym0; $('th1').textContent = sym1;
+  const p = S.pool, sym0 = p.sym0, sym1 = p.sym1;
+  $('buyGotH').textContent = sym0 + ' received'; $('invBuyGotH').textContent = sym0 + ' received'; $('invSellGotH').textContent = sym1 + ' received';
   $('poolName').textContent = `${sym0}/${sym1}`;
-  const actL = activeL(bs, p.tick);
-  $('poolMeta').textContent = `spot ${fmtP(p.price)} · TVL ${fmtUsd(p.tvl,0)} · in range ${fmtUsd(p.tvlIn,0)} · ${S.positions.length} positions` + (S.mult !== 1 ? ` · liquidity ×${S.mult}` : '') + (S.hyp.length ? ` · ${S.hyp.length} hypothetical` : '');
+  $('buyTitle').textContent = `Buying ${sym0} with ${sym1}`;
+  $('poolMeta').textContent = `spot ${fmtP(p.price)} · fee ${+(S.fee*100).toFixed(4)}% · TVL ${fmtUsd(p.tvl,0)} · in range ${fmtUsd(p.tvlIn,0)} · ${S.positions.length} positions`;
 
-  // diagnosis: capital on the wrong side for this direction
-  const wrong = S.positions.filter(x => !S.disabled.has(x.id) && (dir === 'buy' ? x.tu <= p.tick : x.tl > p.tick));
-  const wrongUsd = wrong.reduce((s,x) => s + x.usd, 0), tot = S.positions.reduce((s,x) => s + x.usd, 0);
-  const d = $('diag');
-  if (tot > 0 && wrongUsd > 0) {
-    const pc = wrongUsd/tot*100;
-    d.hidden = false; d.className = 'diag' + (pc >= 25 ? ' bad' : '');
-    d.textContent = dir === 'buy'
-      ? `${fmtUsd(wrongUsd,0)} (${pc.toFixed(0)}% of TVL) sits entirely below spot as ${sym1} and adds nothing to buy depth. Buys can only consume ${sym0} held at or above spot.`
-      : `${fmtUsd(wrongUsd,0)} (${pc.toFixed(0)}% of TVL) sits entirely above spot as ${sym0} and adds nothing to sell depth. Sells can only consume ${sym1} held at or below spot.`;
-  } else if (tot > 0) { d.hidden = false; d.className = 'diag ok'; d.textContent = `All ${fmtUsd(tot,0)} of position value can contribute to ${dir === 'buy' ? 'buy' : 'sell'} depth.`; }
-  else d.hidden = true;
-
-  // forward
-  const usd = Math.max(0, +$('amt').value || 0), r = simulate(dir, usd, bs);
-  $('fwdTitle').textContent = `${dir === 'buy' ? 'Buying' : 'Selling'} ${fmtUsd(usd,0)} of ${sym0}`;
-  $('tEnd').textContent = r.ranOut ? 'out of inventory' : fmtP(r.endPrice); $('tEnd').className = 'v ' + (r.ranOut ? 'bad' : cls(Math.abs(r.impact), 5, 15));
-  $('tEndS').textContent = `spot ${fmtP(p.price)}`;
-  $('tImp').textContent = r.ranOut ? '∞' : fmtPct(dir === 'buy' ? r.impact : -r.impact); $('tImp').className = 'v ' + (r.ranOut ? 'bad' : cls(Math.abs(r.impact), 5, 15));
-  $('tAvg').textContent = r.ranOut ? '–' : fmtP(r.avg); $('tAvgS').textContent = dir === 'buy' ? `${fmtNum(r.got,2)} ${sym0} received` : `${fmtUsd(r.got,0)} ${sym1} received`;
-  $('tSlip').textContent = r.ranOut ? '∞' : fmtPct(r.slip); $('tSlip').className = 'v ' + (r.ranOut ? 'bad' : cls(Math.abs(r.slip), 2, 8));
-  $('fwdNote').innerHTML = r.ranOut ? `<span class="cliff">Liquidity exhausted before this size fills. The pool cannot absorb ${fmtUsd(usd,0)} of ${dir}s at any price.</span>` : '';
-
-  // inverse
-  const tol = Math.max(0, +$('tol').value || 0), metric = $('metric').value, mx = inverse(dir, tol, metric, bs), rm = simulate(dir, mx, bs);
-  $('invTitle').textContent = `Inside a ${tol}% ${metric === 'slip' ? 'slippage' : 'price impact'} limit`;
-  $('tMax').textContent = fmtUsd(mx, 0); $('tMaxS').textContent = `max ${dir} of ${sym0} at ≤${tol}%`;
-  $('tMaxGet').textContent = dir === 'buy' ? fmtNum(rm.got, 2) + ' ' + sym0 : fmtUsd(rm.got, 0);
-  $('tMaxGetS').textContent = `avg fill ${fmtP(rm.avg)}`;
-  $('tMaxEnd').textContent = fmtP(rm.endPrice); $('tMaxEndS').textContent = fmtPct(dir === 'buy' ? rm.impact : -rm.impact) + ' vs spot';
-
-  // ladder
-  const rows = ladder(dir, bs), tb = $('ladder').tBodies[0]; tb.innerHTML = '';
-  $('ladTitle').textContent = `Depth ladder · ${dir === 'buy' ? 'buys push price up' : 'sells push price down'}`;
-  $('ladNote').textContent = `Cumulative ${dir} size needed to walk price to each band edge. When liquidity after drops near zero, the pool is effectively out of inventory.`;
-  for (const rw of rows) {
-    const mv = (rw.price/p.price - 1)*100, thin = rw.Lafter <= actL*0.1;
-    tb.insertAdjacentHTML('beforeend', `<tr><td>${fmtP(rw.price)}</td><td class="num">${fmtPct(mv)}</td><td class="num">${fmtUsd(rw.cum,0)}</td><td class="num ${thin ? 'bad' : ''}">${rw.Lafter <= 0 ? '0 — exhausted' : (rw.Lafter/actL*100).toFixed(0) + '% of current'}</td></tr>`);
+  const bt = $('buyTbl').tBodies[0]; bt.innerHTML = '';
+  for (const x of SIZES) {
+    const r = simulate('buy', x);
+    bt.insertAdjacentHTML('beforeend', r.ranOut
+      ? `<tr><td class="key">${fmtUsd(x,0)}</td><td colspan="5" class="bad">out of inventory — the pool cannot fill this size</td></tr>`
+      : `<tr><td class="key">${fmtUsd(x,0)}</td><td class="num">${fmtP(r.avg)}</td><td class="num ${cls(r.slip,2,8)}">${fmtPct(r.slip)}</td><td class="num">${fmtP(r.endPrice)}</td><td class="num ${cls(r.impact,5,15)}">${fmtPct(r.impact)}</td><td class="num">${fmtNum(r.got,2)}</td></tr>`);
   }
-  if (!rows.length) tb.innerHTML = '<tr><td colspan="4" class="meta">No band edges in this direction.</td></tr>';
 
-  // curve
-  const xmaxA = inverse(dir, 60, 'impact', bs), xmax = Math.max(1000, Math.min(xmaxA * 1.15, p.tvl * 4 || 1e6));
+  const it = $('invTbl').tBodies[0]; it.innerHTML = '';
+  for (const t of TOLS) {
+    const mb = inverse('buy', t), rb = simulate('buy', mb), ms = inverse('sell', t), rs = simulate('sell', ms);
+    it.insertAdjacentHTML('beforeend', `<tr><td class="key">${t}%</td><td class="num">${fmtUsd(mb,0)}</td><td class="num">${fmtNum(rb.got,2)}</td><td class="num">${fmtUsd(ms,0)}</td><td class="num">${fmtUsd(rs.got,0)}</td></tr>`);
+  }
+
+  const xmaxA = inverse('buy', 60), xmax = Math.max(1000, Math.min(xmaxA * 1.15, p.tvl * 4 || 1e6));
   const N = 60, xs = [], slips = [], imps = [];
-  for (let i = 1; i <= N; i++) { const x = xmax*i/N, q = simulate(dir, x, bs); xs.push(x); slips.push(q.ranOut ? null : +q.slip.toFixed(2)); imps.push(q.ranOut ? null : +q.impact.toFixed(2)); }
-  $('chartTitle').textContent = `Slippage curve · ${dir === 'buy' ? 'buying' : 'selling'} ${sym0}, 0 → ${fmtUsd(xmax,0)}`;
+  for (let i = 1; i <= N; i++) { const x = xmax*i/N, q = simulate('buy', x); xs.push(x); slips.push(q.ranOut ? null : +q.slip.toFixed(2)); imps.push(q.ranOut ? null : +q.impact.toFixed(2)); }
+  $('chartTitle').textContent = `Slippage curve · buying ${sym0}, $0 → ${fmtUsd(xmax,0)}`;
   if (S.chart) S.chart.destroy();
   S.chart = new Chart($('curve'), { type:'line', data:{ labels:xs.map(x => fmtUsd(x,0)), datasets:[
-      { label:'Slippage (avg fill vs spot)', data:slips, borderColor:'#4ea8ff', backgroundColor:'rgba(78,168,255,.12)', fill:true, tension:.25, pointRadius:0, borderWidth:2 },
+      { label:'Slippage (avg fill vs spot, fee incl.)', data:slips, borderColor:'#4ea8ff', backgroundColor:'rgba(78,168,255,.12)', fill:true, tension:.25, pointRadius:0, borderWidth:2 },
       { label:'Price impact (end price vs spot)', data:imps, borderColor:'#f5b83d', borderDash:[5,4], tension:.25, pointRadius:0, borderWidth:2 } ] },
     options:{ responsive:true, maintainAspectRatio:false, interaction:{ mode:'index', intersect:false },
       plugins:{ legend:{ labels:{ color:'#9aa4b2', boxWidth:12 } }, tooltip:{ callbacks:{ label:c => `${c.dataset.label}: ${c.parsed.y == null ? 'out of inventory' : c.parsed.y.toFixed(2) + '%'}` } } },
       scales:{ x:{ ticks:{ color:'#9aa4b2', maxTicksLimit:8 }, grid:{ color:'#262a33' } }, y:{ ticks:{ color:'#9aa4b2', callback:v => v + '%' }, grid:{ color:'#262a33' }, beginAtZero:true } } } });
-
-  // positions
-  const pb = $('pos').tBodies[0]; pb.innerHTML = '';
-  const list = [...S.positions].sort((a,b) => b.usd - a.usd);
-  for (const x of list) {
-    const lo = priceOf(sqrtAtTick(x.tl)), hi = priceOf(sqrtAtTick(x.tu)), full = x.tu - x.tl > 1500000;
-    const mine = S.wallet && x.owner === S.wallet, on = !S.disabled.has(x.id);
-    pb.insertAdjacentHTML('beforeend', `<tr style="${on ? '' : 'opacity:.45'}"><td><input type="checkbox" data-id="${x.id}" ${on ? 'checked' : ''} aria-label="include position ${x.id}"></td>
-      <td>#${x.id}${x.ichi ? ' <span class="tag hyp">ICHI</span>' : ''}<div class="small">${short(x.owner)}</div></td>
-      <td>${full ? 'full range' : fmtP(lo) + ' – ' + fmtP(hi)}</td>
-      <td class="num">${fmtNum(x.a0, 2)}</td><td class="num">${fmtNum(x.a1, 2)}</td><td class="num">${fmtUsd(x.usd, 0)}</td>
-      <td>${x.inRange ? '<span class="tag in">in range</span>' : '<span class="tag out">' + (x.tu <= p.tick ? 'below spot' : 'above spot') + '</span>'}${mine ? '<span class="tag mine">this wallet</span>' : ''}</td></tr>`);
-  }
-  for (const h of S.hyp) {
-    const am = bandAmounts(h.L, h.tl, h.tu), v = am.a0*p.price + am.a1;
-    pb.insertAdjacentHTML('beforeend', `<tr><td><button class="rm" data-h="${h.id}">remove</button></td><td>hypothetical</td><td>${fmtP(h.low)} – ${fmtP(h.high)}</td>
-      <td class="num">${fmtNum(am.a0,2)}</td><td class="num">${fmtNum(am.a1,2)}</td><td class="num">${fmtUsd(v,0)}</td><td><span class="tag hyp">what-if</span></td></tr>`);
-  }
-  $('posCount').textContent = `· ${S.positions.length} live${S.hyp.length ? ' + ' + S.hyp.length + ' hypothetical' : ''}`;
-  pb.querySelectorAll('input[data-id]').forEach(cb => cb.addEventListener('change', e => { const id = e.target.dataset.id; if (e.target.checked) S.disabled.delete(id); else S.disabled.add(id); render(); }));
-  pb.querySelectorAll('button[data-h]').forEach(b => b.addEventListener('click', e => { S.hyp = S.hyp.filter(h => String(h.id) !== e.target.dataset.h); render(); }));
 }
 
-// ---- wiring ----
-$('loadBtn').addEventListener('click', load);
-$('addr').addEventListener('keydown', e => { if (e.key === 'Enter') load(); });
-$('refreshBtn').addEventListener('click', () => S.poolId && loadPool(S.poolId));
-$('poolPick').addEventListener('change', e => loadPool(e.target.value));
-$('auto').addEventListener('change', setAuto);
-$('dirBuy').addEventListener('click', () => { S.dir = 'buy'; $('dirBuy').classList.add('active'); $('dirSell').classList.remove('active'); render(); });
-$('dirSell').addEventListener('click', () => { S.dir = 'sell'; $('dirSell').classList.add('active'); $('dirBuy').classList.remove('active'); render(); });
-['amt','tol','metric'].forEach(id => $(id).addEventListener('input', render));
-$('mult').addEventListener('input', () => { S.mult = Math.max(0, +$('mult').value || 0); render(); });
-$('fee').addEventListener('input', () => { S.fee = Math.max(0, (+$('fee').value || 0)/100); render(); });
-$('hAdd').addEventListener('click', () => {
-  const low = +$('hLow').value, high = +$('hHigh').value, val = +$('hVal').value;
-  if (!(low > 0 && high > low && val > 0)) { alert('Enter low < high prices and a fund amount.'); return; }
-  const tl = Math.round(2*Math.log(sqrtOfPrice(low))/Math.log(1.0001)), tu = Math.round(2*Math.log(sqrtOfPrice(high))/Math.log(1.0001));
-  S.hyp.push({ id:++S.hypSeq, low, high, tl, tu, L:bandL(val, low, high) }); render();
-});
-$('shareBtn').addEventListener('click', async () => {
-  const u = new URL(location.href); u.search = ''; if (S.wallet) u.searchParams.set('wallet', S.wallet); else if (S.poolId) u.searchParams.set('pool', S.poolId);
-  try { await navigator.clipboard.writeText(u.toString()); $('shareBtn').textContent = 'Copied'; setTimeout(() => $('shareBtn').textContent = 'Copy share link', 1500); } catch { prompt('Share link', u.toString()); }
-});
-$('autoSecLbl').textContent = AUTO_SEC;
-
-(function init() {
-  const q = new URLSearchParams(location.search), w = q.get('wallet'), pl = q.get('pool');
-  $('addr').value = w || pl || DEFAULT_POOL;
-  load(); setAuto();
+$('poolSel').addEventListener('change', load);
+(async function init() {
+  const q = new URLSearchParams(location.search), pl = (q.get('pool')||'').toLowerCase();
+  await loadPairs();
+  const opt = pl && [...$('poolSel').options].find(o => o.value.toLowerCase() === pl);
+  $('poolSel').value = opt ? opt.value : DEFAULT_POOL;
+  load();
 })();
 </script>
 </body>
