@@ -8,6 +8,7 @@
   <style>
     :root { --bg:#0f1115; --panel:#171a21; --border:#262a33; --text:#e7ecf2; --muted:#9aa4b2; --accent:#4ea8ff; --red:#ff5c5c; --green:#3ddc97; --amber:#f5b83d; }
     * { box-sizing: border-box; }
+    [hidden] { display:none !important; }
     body { margin:0; padding:24px; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; font-variant-numeric:tabular-nums; }
     .wrap { max-width: 960px; margin: 0 auto; }
     h1 { margin:0 0 16px; font-size:22px; }
@@ -31,7 +32,11 @@
     td.key { font-weight:600; }
     .ok { color:var(--green); } .warn { color:var(--amber); } .bad { color:var(--red); }
     .scroll { overflow-x:auto; }
-    .chart-wrap { position:relative; height:300px; }
+    .state { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:13px; }
+    .spin { width:14px; height:14px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .8s linear infinite; flex:none; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .chart-wrap { position:relative; height:340px; }
+    .cap { font-size:12px; color:var(--muted); margin-top:10px; }
     @media (prefers-reduced-motion: reduce) { * { transition:none !important; animation:none !important; } }
   </style>
 </head>
@@ -41,12 +46,15 @@
 
   <div class="top">
     <label for="poolSel">Pool</label>
-    <select id="poolSel"><option value="0xce4838e3287d66ce20fa296704f2b77de9d2a92d">wtFGI/USDC</option></select>
-    <div class="live"><span class="dot wait" id="dot"></span><span id="liveTxt">connecting…</span></div>
+    <select id="poolSel"><option value="" disabled selected>Select a pool…</option><option value="0xce4838e3287d66ce20fa296704f2b77de9d2a92d">wtFGI/USDC</option></select>
+    <div class="live"><span class="dot wait" id="dot"></span><span id="liveTxt">loading pool list…</span></div>
   </div>
 
+  <div class="panel state" id="state"><span class="spin" id="spin" hidden></span><span id="stateTxt">Select a pool to load its live liquidity and run the calculation.</span></div>
+
+  <div id="results" hidden>
   <div class="panel">
-    <div class="big" id="poolName">Loading…</div>
+    <div class="big" id="poolName"></div>
     <div class="meta" id="poolMeta"></div>
   </div>
 
@@ -64,7 +72,9 @@
 
   <div class="panel">
     <h4 id="chartTitle">Slippage curve</h4>
-    <div class="chart-wrap"><canvas id="curve" role="img" aria-label="Slippage and price impact versus buy size"></canvas></div>
+    <div class="chart-wrap"><canvas id="curve" role="img" aria-label="Buy versus sell slippage at trade sizes from $100 to $10,000"></canvas></div>
+    <div class="cap" id="chartCap"></div>
+  </div>
   </div>
 </div>
 
@@ -148,15 +158,24 @@ async function loadPairs() {
     PAIRS = {}; for (const r of rows) PAIRS[r.id] = r;
     const pinned = rows.filter(r => r.id === DEFAULT_POOL), rest = rows.filter(r => r.id !== DEFAULT_POOL);
     const html = [...pinned, ...rest].map(r => `<option value="${r.id}">${r.name} · ${fmtUsd(r.tvl,0)}</option>`).join('');
-    if (html) $('poolSel').innerHTML = html;
+    if (html) { $('poolSel').innerHTML = `<option value="" disabled>Select a pool…</option>` + html; $('poolSel').value = ''; }
   } catch (e) { /* keep the pinned default option */ }
 }
 async function load() {
-  const id = $('poolSel').value, pr = PAIRS[id.toLowerCase()];
+  const id = $('poolSel').value; if (!id) return;
+  const pr = PAIRS[id.toLowerCase()], name = pr ? pr.name : 'this pool';
   S.fee = pr && pr.fee >= 0 ? pr.fee/100 : 0.0005;   // top-pairs fee is a percent
+  $('results').hidden = true; $('state').hidden = false; $('spin').hidden = false;
+  $('stateTxt').textContent = `Loading live positions for ${name}…`;
   $('dot').className = 'dot wait'; $('liveTxt').textContent = 'loading…';
-  try { parsePool(await getJson(`${API}/positions/pool/${id}`)); setLive(true, 'live · ' + new Date().toLocaleTimeString()); render(); }
-  catch (e) { setLive(false, 'fetch failed: ' + e.message); }
+  try {
+    parsePool(await getJson(`${API}/positions/pool/${id}`));      // the only pool request: once, for the selected pool
+    render(); setLive(true, 'live · ' + new Date().toLocaleTimeString());
+    $('state').hidden = true; $('results').hidden = false;
+  } catch (e) {
+    $('spin').hidden = true; $('stateTxt').textContent = `Couldn't load positions (${e.message}). Pick the pool again to retry.`;
+    setLive(false, 'fetch failed');
+  }
 }
 
 // ---- render ----
@@ -182,17 +201,37 @@ function render() {
     it.insertAdjacentHTML('beforeend', `<tr><td class="key">${t}%</td><td class="num">${fmtUsd(mb,0)}</td><td class="num">${fmtNum(rb.got,2)}</td><td class="num">${fmtUsd(ms,0)}</td><td class="num">${fmtUsd(rs.got,0)}</td></tr>`);
   }
 
-  const xmaxA = inverse('buy', 60), xmax = Math.max(1000, Math.min(xmaxA * 1.15, p.tvl * 4 || 1e6));
-  const N = 60, xs = [], slips = [], imps = [];
-  for (let i = 1; i <= N; i++) { const x = xmax*i/N, q = simulate('buy', x); xs.push(x); slips.push(q.ranOut ? null : +q.slip.toFixed(2)); imps.push(q.ranOut ? null : +q.impact.toFixed(2)); }
-  $('chartTitle').textContent = `Slippage curve · buying ${sym0}, $0 → ${fmtUsd(xmax,0)}`;
+  // buy vs sell slippage at discrete trade sizes
+  const CS = [100, 500, 1000, 2000, 3000, 5000, 7500, 10000];
+  const lab = x => x >= 1000 ? '$' + String(x/1000).replace(/\.0$/, '') + 'k' : '$' + x;
+  const buyS  = CS.map(x => { const r = simulate('buy',  x); return r.ranOut ? null : +r.slip.toFixed(1); });
+  const sellS = CS.map(x => { const r = simulate('sell', x); return r.ranOut ? null : +r.slip.toFixed(1); });
+  $('chartTitle').textContent = `${sym0} / ${sym1} · buy vs sell slippage`;
+  let divergeAt = null;
+  for (let i = 0; i < CS.length; i++) {
+    if (buyS[i] == null) { divergeAt = CS[i]; break; }
+    if (sellS[i] != null && buyS[i] - sellS[i] >= 3) { divergeAt = CS[i]; break; }
+  }
+  $('chartCap').textContent = divergeAt
+    ? `Buys get much worse past ~${lab(divergeAt)} (liquidity thins above spot). Sells stay flatter.`
+    : `Buy and sell depth are similar across these sizes.`;
+  const pointLabels = { id:'pointLabels', afterDatasetsDraw(chart) {
+    const { ctx } = chart; ctx.save();
+    ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'; ctx.textAlign = 'center';
+    chart.data.datasets.forEach((ds, di) => {
+      const meta = chart.getDatasetMeta(di); if (meta.hidden) return;
+      meta.data.forEach((pt, i) => { const v = ds.data[i]; if (v == null) return; ctx.fillStyle = ds.borderColor; ctx.fillText(v.toFixed(1) + '%', pt.x, pt.y + (di === 0 ? -10 : 17)); });
+    });
+    ctx.restore();
+  } };
   if (S.chart) S.chart.destroy();
-  S.chart = new Chart($('curve'), { type:'line', data:{ labels:xs.map(x => fmtUsd(x,0)), datasets:[
-      { label:'Slippage (avg fill vs spot, fee incl.)', data:slips, borderColor:'#4ea8ff', backgroundColor:'rgba(78,168,255,.12)', fill:true, tension:.25, pointRadius:0, borderWidth:2 },
-      { label:'Price impact (end price vs spot)', data:imps, borderColor:'#f5b83d', borderDash:[5,4], tension:.25, pointRadius:0, borderWidth:2 } ] },
-    options:{ responsive:true, maintainAspectRatio:false, interaction:{ mode:'index', intersect:false },
-      plugins:{ legend:{ labels:{ color:'#9aa4b2', boxWidth:12 } }, tooltip:{ callbacks:{ label:c => `${c.dataset.label}: ${c.parsed.y == null ? 'out of inventory' : c.parsed.y.toFixed(2) + '%'}` } } },
-      scales:{ x:{ ticks:{ color:'#9aa4b2', maxTicksLimit:8 }, grid:{ color:'#262a33' } }, y:{ ticks:{ color:'#9aa4b2', callback:v => v + '%' }, grid:{ color:'#262a33' }, beginAtZero:true } } } });
+  S.chart = new Chart($('curve'), { type:'line', plugins:[pointLabels], data:{ labels:CS.map(lab), datasets:[
+      { label:`Buy ${sym0}`,  data:buyS,  borderColor:'#ff5c5c', backgroundColor:'rgba(255,92,92,.14)', fill:{ target:'+1', above:'rgba(255,92,92,.14)', below:'rgba(61,220,151,.10)' }, tension:.2, pointRadius:4, pointHoverRadius:6, borderWidth:2.5, spanGaps:false },
+      { label:`Sell ${sym0}`, data:sellS, borderColor:'#3ddc97', backgroundColor:'rgba(61,220,151,.10)', fill:false, tension:.2, pointRadius:4, pointHoverRadius:6, borderWidth:2.5, spanGaps:false } ] },
+    options:{ responsive:true, maintainAspectRatio:false, interaction:{ mode:'index', intersect:false }, layout:{ padding:{ top:18, bottom:4 } },
+      plugins:{ legend:{ labels:{ color:'#e7ecf2', boxWidth:12 } }, tooltip:{ callbacks:{ label:c => `${c.dataset.label}: ${c.parsed.y == null ? 'out of inventory' : c.parsed.y.toFixed(1) + '% slippage'}` } } },
+      scales:{ x:{ title:{ display:true, text:'Trade size (USD)', color:'#9aa4b2' }, ticks:{ color:'#9aa4b2' }, grid:{ color:'#262a33' } },
+               y:{ title:{ display:true, text:'Slippage (avg fill vs spot)', color:'#9aa4b2' }, ticks:{ color:'#9aa4b2', callback:v => v + '%' }, grid:{ color:'#262a33' }, beginAtZero:true } } } });
 }
 
 $('poolSel').addEventListener('change', load);
@@ -200,8 +239,8 @@ $('poolSel').addEventListener('change', load);
   const q = new URLSearchParams(location.search), pl = (q.get('pool')||'').toLowerCase();
   await loadPairs();
   const opt = pl && [...$('poolSel').options].find(o => o.value.toLowerCase() === pl);
-  $('poolSel').value = opt ? opt.value : DEFAULT_POOL;
-  load();
+  if (opt) { $('poolSel').value = opt.value; load(); }           // a shared ?pool= link loads that one pool
+  else { $('dot').className = 'dot'; $('liveTxt').textContent = 'ready'; }   // otherwise wait for a selection
 })();
 </script>
 </body>
